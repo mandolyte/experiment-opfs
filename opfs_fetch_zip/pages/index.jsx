@@ -47,17 +47,8 @@ export default function Home() {
   }, [dbWorker])
 
   return (<div>
-      <h1>Fetch DB and Write to OPFS</h1>
-      
       <p>See console log for timings.</p>
       
-      <p>Try these two queries:</p>
-      <pre>
-      select * from sqlite_schema;<br/>
-      select count(*) from twl;<br/>
-      select * from twl limit 4;<br/>
-      select * from pragma_table_info('twl');
-      </pre>
       <br/>
       <textarea rows="5" cols="40" onInput={
         (e) => {
