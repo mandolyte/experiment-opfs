@@ -1,17 +1,14 @@
-# Demo of loading a large CSV file
+# opfs_fetch_zip
 
-This will use the web worker to import a 
-large dump file. The file has nearly 99K rows.
+This demo shows:
 
-The database will be created in the Origin Private File System.
+- fetching of a zip file at startup
+- writing the zip file to OPFS
+- getting a list of files in the zip
+- displaying the list
 
-Timings:
+The web worker scripts are in the folder `src/workers`.
 
-```
-Time to initialize 21ms
-Time to fetch dump file 676ms
-Time to create table twl 15ms
-Time to split into 2d Table 55ms
-Time to load file 4398ms
-```
+The web page is `pages/index.jsx`.
 
+The state is managed in `src/context/AppContext.js`.
