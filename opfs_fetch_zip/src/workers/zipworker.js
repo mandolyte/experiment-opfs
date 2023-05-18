@@ -7,7 +7,11 @@ async function saveToOpfs(fileURL) {
   const handle = await root.getFileHandle(fname, { create: true });
   // Get sync access handle
   const accessHandle = await handle.createSyncAccessHandle();
+  const startFetch = Date.now()
   const response = await fetch(fileURL, /*{ mode: 'no-cors'}*/);
+  const durationFetch = Date.now() - startFetch
+  console.log(`Time to fetch file was ${durationFetch}ms`)
+  const startOpfsWrite = Date.now()
   const content = await response.blob();
   const bindata = await content.arrayBuffer();
   const dataview = new DataView(bindata);
@@ -16,19 +20,18 @@ async function saveToOpfs(fileURL) {
 
   // Always close FileSystemSyncAccessHandle if done.
   accessHandle.close();
+  const durationOpfsWrite = Date.now() - startOpfsWrite
+  console.log(`Time to write to OPFS was ${durationOpfsWrite}ms`)
   return fname;
 }
 
 
 onmessage = (e) => {
   console.log('zipworker/onmessage(): Message received from main script:',e);
-  let start = Date.now();
   // fetch and save the file
   const URL = e.data
   
   saveToOpfs(URL).then( (data) => {
-    const timeToFetch = Date.now() - start;
-    console.log(`Time to save file ${data} was ${timeToFetch}ms`)
     postMessage(`file-saved ${data}`)
   })
 }
