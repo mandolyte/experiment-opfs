@@ -2,63 +2,34 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from 'next/router'
 import { AppContext } from "../src/context/AppContext"
 
-export default function Secondary() {
+export default function Home() {
   const router = useRouter()
-
   // app context
   const {
     state: {
-      dbWorker,
-    }, 
+      zipWorker,
+      zipIndex,
+    },
     actions: {
-
     }
   } = useContext(AppContext)
 
-
-  const [lines, setLines] = useState("")
-  const [query, setQuery] = useState("")
-
-  async function onMainPageClick () {
-    router.push('/')
+  async function onSecondayPageClick () {
+    router.push('/secondary')
   }
 
-  useEffect( () => {
-
-    if (dbWorker && query && query !== "") {
-      // console.log("Posting a message")
-      dbWorker.postMessage(query)
-    }
-  
-  }, [dbWorker, query])
-
-  useEffect( () => {
-    if (dbWorker) {
-      dbWorker.onmessage = (e) => {
-        let msg = "";
-        if ( typeof e.data === 'object' ) {
-          msg = e.data.message; // + "\n" + e.data.stack;
-        } else {
-          msg = e.data
-        }
-        setLines(msg);
-        // console.log('dbWorker.onmessage() Message received from worker:', e);
+  return zipIndex.length > 0 ? <div>
+      <p>See console log for timings.</p>
+      <ul>
+      {
+        zipIndex.map( (filename, idx) => {
+          return <li key={idx}>{filename}</li>
+        })
       }
-    }
-  }, [dbWorker])
-
-  return (<div>
-      <h1>This is the secondary page!</h1>
-
+      </ul>
       <br/>
-      <textarea onInput={
-        (e) => {
-          // console.log((e.target).value)
-          setQuery((e.target).value)
-        }
-      }/>
-      <pre>{lines}</pre>
-      <button onClick={onMainPageClick}>Go to main page!</button>
+      <button onClick={onSecondayPageClick}>Go to other page!</button>
     </div>
-  );
+    :
+      <p>Waiting...</p>;
 }

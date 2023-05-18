@@ -7,57 +7,29 @@ export default function Home() {
   // app context
   const {
     state: {
-      dbWorker,
-    }, 
+      zipWorker,
+      zipIndex,
+    },
     actions: {
-
     }
   } = useContext(AppContext)
-
-
-  const [lines, setLines] = useState("")
-  const [query, setQuery] = useState("")
 
   async function onSecondayPageClick () {
     router.push('/secondary')
   }
 
-  useEffect( () => {
-
-    if (dbWorker && query && query !== "") {
-      // console.log("Posting a message")
-      dbWorker.postMessage(query)
-    }
-  
-  }, [dbWorker, query])
-
-  useEffect( () => {
-    if (dbWorker) {
-      dbWorker.onmessage = (e) => {
-        let msg = "";
-        if ( typeof e.data === 'object' ) {
-          msg = e.data.message; // + "\n" + e.data.stack;
-        } else {
-          msg = e.data
-        }
-        setLines(msg);
-        // console.log('dbWorker.onmessage() Message received from worker:', e);
-      }
-    }
-  }, [dbWorker])
-
-  return (<div>
+  return zipIndex.length > 0 ? <div>
       <p>See console log for timings.</p>
-      
+      <ul>
+      {
+        zipIndex.map( (filename, idx) => {
+          return <li key={idx}>{filename}</li>
+        })
+      }
+      </ul>
       <br/>
-      <textarea rows="5" cols="40" onInput={
-        (e) => {
-          // console.log((e.target).value)
-          setQuery((e.target).value)
-        }
-      }/>
-      <pre>{lines}</pre>
       <button onClick={onSecondayPageClick}>Go to other page!</button>
     </div>
-  );
+    :
+      <p>Waiting...</p>;
 }
