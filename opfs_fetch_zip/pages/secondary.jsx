@@ -7,8 +7,7 @@ export default function Home() {
   // app context
   const {
     state: {
-      zipWorker,
-      zipIndex,
+      fileExtract,
     },
     actions: {
     }
@@ -18,15 +17,11 @@ export default function Home() {
     router.push('/secondary')
   }
 
-  return zipIndex.length > 0 ? <div>
-      <p>See console log for timings.</p>
-      <ul>
-      {
-        zipIndex.map( (filename, idx) => {
-          return <li key={idx}>{filename}</li>
-        })
-      }
-      </ul>
+  return fileExtract ? <div>
+    <h1>License File from Zip</h1>
+      <pre>
+      {fileExtract}
+      </pre>
       <br/>
       <button onClick={onSecondayPageClick}>Go to other page!</button>
     </div>

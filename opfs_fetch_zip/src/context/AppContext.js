@@ -11,6 +11,7 @@ export default function AppContextProvider({
   const [zipWorker,setZipWorker] = useState(null)
   const [fname,setFname] = useState(null)
   const [zipIndex, setZipIndex] = useState([])
+  const [fileExtract, setFileExtract] = useState(null)
   const [quotas, setQuotas] = useState([])
   // const [query, setQuery] = useState<any>("")
   let needsSetup = true
@@ -48,6 +49,18 @@ export default function AppContextProvider({
     }
   }, [zipWorker]);
 
+  // get the license file from the zip
+  useEffect( () => {
+    if ( zipWorker && zipIndex.length > 0) {
+      const _zipExtract = new Worker(new URL("src/workers/zipextract.js", import.meta.url));
+      _zipExtract.postMessage([fname,'es-419_tn/LICENSE.md'])
+      _zipExtract.onmessage = (e) => {
+        console.log('AppContext()/useEffect() _zipExtract.onmessage() Message received from worker:', e);
+        setFileExtract(e.data);
+      }
+    }
+  }, [zipWorker,zipIndex]);
+  
   // get quotas
   useEffect( () => {
     async function getStorage() {
@@ -66,6 +79,7 @@ export default function AppContextProvider({
       zipWorker,
       zipIndex,
       quotas,
+      fileExtract,
     },
     actions: {
     }
