@@ -11,6 +11,7 @@ export default function AppContextProvider({
   const [zipWorker,setZipWorker] = useState(null)
   const [fname,setFname] = useState(null)
   const [zipIndex, setZipIndex] = useState([])
+  const [quotas, setQuotas] = useState([])
   // const [query, setQuery] = useState<any>("")
   let needsSetup = true
 
@@ -47,6 +48,16 @@ export default function AppContextProvider({
     }
   }, [zipWorker]);
 
+  // get quotas
+  useEffect( () => {
+    async function getStorage() {
+      const {usage, quota} = await navigator.storage.estimate();
+      setQuotas([usage, quota])
+    }
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      getStorage()
+    }
+  }, []);
 
 
   // create the value for the context provider
@@ -54,6 +65,7 @@ export default function AppContextProvider({
     state: {
       zipWorker,
       zipIndex,
+      quotas,
     },
     actions: {
     }

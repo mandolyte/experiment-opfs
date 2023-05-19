@@ -9,6 +9,7 @@ export default function Home() {
     state: {
       zipWorker,
       zipIndex,
+      quotas,
     },
     actions: {
     }
@@ -19,6 +20,9 @@ export default function Home() {
   }
 
   return zipIndex.length > 0 ? <div>
+      <h1>Quotas</h1>
+      <p>Used: {quotas.length === 2 && quotas[0]}</p>
+      <p>Granted: {quotas.length === 2 && quotas[1]}</p>
       <p>See console log for timings.</p>
       <ul>
       {
